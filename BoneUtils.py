@@ -11,7 +11,7 @@ bl_info = {
 import bpy
 
 class MainPanel(bpy.types.Panel):
-    bl_idname = "MAIN_PANEL"
+    bl_idname = "BONEUTILS_PT_MAIN_PANEL"
     bl_label = "About"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -29,7 +29,7 @@ class MainPanel(bpy.types.Panel):
         row.label(text="Developed by Kwong Kuo Liang (KKL)")
 
 class BatchEnableConstraintsPanel(MainPanel, bpy.types.Panel):
-    bl_idname = "BATCH_ENABLE_CONSTRAINTS_PANEL"
+    bl_idname = "BONEUTILS_PT_BATCH_ENABLE_CONSTRAINTS_PANEL"
     bl_label = "Enable Bone Constraints"
 
     def draw(self, context):
@@ -63,7 +63,7 @@ def enableConstraints(enable):
                 constraint.mute = not enable
 
 class ChangeConstraintsTargetPanel(MainPanel, bpy.types.Panel):
-    bl_idname = "CONSTRAINTS_TARGET_PANEL"
+    bl_idname = "BONEUTILS_PT_CONSTRAINTS_TARGET_PANEL"
     bl_label = "Bone Constraints Target"
     
     def draw(self, context):
