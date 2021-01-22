@@ -87,12 +87,38 @@ def setConstraintsTarget(target):
             for constraint in poseBone.constraints:
                 constraint.target = target
 
+class ChangeConstraintsInfluencePanel(MainPanel, bpy.types.Panel):
+    bl_idname = "BONEUTILS_PT_CONSTRAINTS_INFLUENCE_PANEL"
+    bl_label = "Bone Constraints Influence"
+    
+    def draw(self, context):
+        layout = self.layout
+        row = layout.row()
+        row.prop(context.scene, "targetInfluenceForBoneConstraints")
+        row = layout.row()
+        row.operator('op.set_constraints_influence', text='Set')
+
+class SetConstraintsInfluenceOp(bpy.types.Operator): 
+    bl_idname = "op.set_constraints_influence"
+    bl_label = "Set constraints influence in selected bones" 
+
+    def execute(self, context):
+        setConstraintsInfluence(context.scene.targetInfluenceForBoneConstraints)
+        return {'FINISHED'}
+
+def setConstraintsInfluence(influence):
+    for poseBone in bpy.context.selected_pose_bones:
+            for constraint in poseBone.constraints:
+                constraint.influence = influence
+
 classes = (
     EnableConstraintsOp,
     DisableConstraintsOp,
     SetConstraintsTargetOp,
+    SetConstraintsInfluenceOp,
     BatchEnableConstraintsPanel,
     ChangeConstraintsTargetPanel,
+    ChangeConstraintsInfluencePanel,
     MainPanel
 )
 
@@ -103,11 +129,19 @@ def register():
         name='Source',
         description='An source object to apply bones constraints from'
     )
+    bpy.types.Scene.targetInfluenceForBoneConstraints = bpy.props.FloatProperty(
+        name = "Influence",
+        description = "Bone constraints influence",
+        default = 1,
+        min = 0.0,
+        max = 1.0
+    )
 
 def unregister():
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
     del bpy.types.Scene.targetObjectForBoneConstraints
+    del bpy.types.Scene.targetInfluenceForBoneConstraints
 
 if __name__ == "__main__":
     register()
